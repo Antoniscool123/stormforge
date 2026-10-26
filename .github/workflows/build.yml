@@ -64,11 +64,3 @@ jobs:
           msg=$(python3 -c "print(open('smoke-summary.txt').read()[:30000].replace('%','%25').replace('\r','%0D').replace('\n','%0A'))")
           echo "::notice title=Smoke test (${{ steps.smoke.outcome }})::$msg"
 
-      - name: Vanilla reference (temporary)
-        if: always()
-        run: |
-          MCJ=~/.gradle/caches/fabric-loom/26.3/minecraft-merged.jar
-          mkdir -p v && cd v && unzip -q -o $MCJ 'data/minecraft/worldgen/feature/ore_gold_buried.json' 'data/minecraft/worldgen/feature/ore_diamond_small.json' 'data/minecraft/loot_table/blocks/lapis_ore.json' 'data/minecraft/worldgen/feature/ore_coal.json'; cd ..
-          for f in $(find v -type f -name "*.json" | sort); do echo "### $f"; tr -d ' \n' < $f; echo; done > vref.txt
-          msg=$(python3 -c "print(open('vref.txt').read()[:20000].replace('%','%25').replace('\r','%0D').replace('\n','%0A'))")
-          echo "::notice title=VREF::$msg"
