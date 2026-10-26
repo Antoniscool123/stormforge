@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   inspect:
     runs-on: ubuntu-latest
@@ -21,74 +24,62 @@ jobs:
       - name: Dump
         run: |
           set +e
-          emit() {
-            python3 - "$1" "$2" <<'PY'
-          import sys
-          t,f=sys.argv[1],sys.argv[2]
-          data=open(f).read()
-          chunks=[data[i:i+3700] for i in range(0,len(data),3700)] or ['']
-          for i,c in enumerate(chunks):
-              m=c.replace('%','%25').replace('\r','%0D').replace('\n','%0A')
-              print(f"::notice title={t}_{i:02d}::{m}")
-          PY
-          }
+          mkdir -p out
           MCJ=~/.gradle/caches/fabric-loom/26.3/minecraft-merged.jar
           FJARS=$(find ~/.gradle/caches/modules-2 -path "*net.fabricmc.fabric-api*" -name "*.jar" ! -name "*sources*" | tr '\n' ':')
           CP="$MCJ:$FJARS"
-          q() { echo "## $1 / $2" >> $3; javap -cp "$CP" -public "$1" 2>&1 | grep -E "$2" | cut -c1-330 >> $3; }
-
-          : > api1.txt
-          q net.minecraft.world.item.equipment.ArmorMaterial "ArmorMaterial\(|DIAMOND|NETHERITE" api1.txt
-          q net.minecraft.world.item.equipment.ArmorType "HELMET|CHESTPLATE|LEGGINGS|BOOTS" api1.txt
-          q net.minecraft.world.item.equipment.EquipmentAssets "DIAMOND|NETHERITE|ROOT|createId" api1.txt
-          q 'net.minecraft.world.item.Item$Properties' "humanoidArmor|pickaxe|axe\(|shovel|hoe\(|food\(|component\(|rarity|trimMaterial|enchantable|repairable|equippable" api1.txt
-          q net.minecraft.world.food.FoodProperties "FoodProperties\(|Builder|nutrition|saturation|alwaysEdible" api1.txt
-          q 'net.minecraft.world.food.FoodProperties$Builder' "." api1.txt
-          q net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect "ApplyStatusEffectsConsumeEffect\(" api1.txt
-          q net.minecraft.world.item.component.Consumable "builder|Consumable\(" api1.txt
-          q 'net.minecraft.world.item.component.Consumable$Builder' "." api1.txt
-          q net.minecraft.core.component.DataComponents "CONSUMABLE|FOOD|ENCHANTABLE|GLIDER" api1.txt
-          q net.minecraft.world.effect.MobEffect "MobEffect\(|applyEffectTick|shouldApplyEffectTickThisTick|applyInstantenousEffect|addAttributeModifier" api1.txt
-          q net.minecraft.world.effect.MobEffects "SPEED|RESISTANCE|ABSORPTION|REGENERATION|FIRE_RESISTANCE|SLOWNESS|WEAKNESS|JUMP_BOOST|LEVITATION|GLOWING" api1.txt
-          q net.minecraft.world.effect.MobEffectInstance "MobEffectInstance\(" api1.txt
-          q net.minecraft.world.effect.MobEffectCategory "BENEFICIAL|HARMFUL|NEUTRAL" api1.txt
-          q net.minecraft.world.entity.LivingEntity "addEffect|getItemBySlot|hasEffect|removeEffect|isInRain|isInWaterOrRain|getAttribute" api1.txt
-          q net.minecraft.world.entity.Entity "isInRain|isInWaterOrRain|isInWater" api1.txt
-          q net.minecraft.core.registries.BuiltInRegistries "MOB_EFFECT|CREATIVE_MODE_TAB|SOUND_EVENT" api1.txt
-          q net.minecraft.core.registries.Registries "MOB_EFFECT|CREATIVE_MODE_TAB|EQUIPMENT_ASSET|ENCHANTMENT" api1.txt
-          q net.minecraft.world.item.CreativeModeTab "builder|Row|icon|title|displayItems" api1.txt
-          q 'net.minecraft.world.item.CreativeModeTab$Builder' "." api1.txt
-          q net.minecraft.sounds.SoundEvents "ARMOR_EQUIP_DIAMOND|ARMOR_EQUIP_NETHERITE|ARMOR_EQUIP_GOLD" api1.txt
-          q net.minecraft.world.level.block.StairBlock "StairBlock\(" api1.txt
-          q net.minecraft.world.level.block.SlabBlock "SlabBlock\(" api1.txt
-          q net.minecraft.world.level.block.WallBlock "WallBlock\(" api1.txt
-          q net.minecraft.world.level.block.TransparentBlock "TransparentBlock\(" api1.txt
-          q net.minecraft.world.level.block.StainedGlassBlock "." api1.txt
-          q net.minecraft.world.level.block.RotatedPillarBlock "RotatedPillarBlock\(" api1.txt
-          q net.minecraft.world.level.block.state.BlockBehaviour\$Properties "noOcclusion|isValidSpawn|isRedstoneConductor|isSuffocating|isViewBlocking|instrument|mapColor|ofFullCopy|ofLegacyCopy|destroyTime|explosionResistance|requiresCorrectToolForDrops" api1.txt
-          q net.minecraft.world.level.block.Blocks "STONE_BRICKS|STONE_BRICK_STAIRS" api1.txt
-          q net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents "END_SERVER_TICK|END_WORLD_TICK|EndTick|EndWorldTick|END_LEVEL_TICK" api1.txt
-          q net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents "ALLOW_DAMAGE|AllowDamage" api1.txt
-          q 'net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents$AllowDamage' "." api1.txt
-          q 'net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents$EndWorldTick' "." api1.txt
-          emit API1 api1.txt
-
+          q() { echo "## $1 / $2" >> out/api.txt; javap -cp "$CP" -public "$1" 2>&1 | grep -E "$2" | cut -c1-400 >> out/api.txt; }
+          unzip -l $MCJ | awk '{print $4}' | grep -i -E "net/minecraft/world/level/block/[A-Za-z]*(Stair|Glass|Transparent|Slab|Wall|Lantern|Pillar)[A-Za-z]*\.class" > out/blockclasses.txt
+          q net.minecraft.world.item.equipment.ArmorMaterial "ArmorMaterial\("
+          q net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents\$EndLevelTick "."
+          q net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents\$EndTick "."
+          q net.minecraft.world.entity.player.Player "getInventory|getItemBySlot"
+          q net.minecraft.server.level.ServerPlayer "serverLevel|level\(\)"
+          q net.minecraft.world.level.Level "isRaining|isThundering|canSeeSky|isRainingAt"
+          q net.minecraft.world.entity.EquipmentSlot "HEAD|CHEST|LEGS|FEET|isArmor"
+          q net.minecraft.tags.ItemTags "TRIMMABLE_ARMOR|HEAD_ARMOR|CHEST_ARMOR|LEG_ARMOR|FOOT_ARMOR|STAIRS|SLABS|WALLS|PICKAXES|SWORDS"
+          q net.minecraft.tags.BlockTags "STAIRS|SLABS|WALLS|MINEABLE_WITH_PICKAXE|NEEDS_IRON_TOOL|NEEDS_DIAMOND_TOOL|INCORRECT_FOR_NETHERITE_TOOL"
+          q net.minecraft.world.damagesource.DamageTypes "LIGHTNING_BOLT|IN_FIRE"
+          q net.minecraft.world.damagesource.DamageSource "is\(|typeHolder"
+          q net.minecraft.tags.DamageTypeTags "IS_LIGHTNING|IS_FIRE"
+          q net.minecraft.world.item.Item "appendHoverText|inventoryTick|onUseTick|finishUsingItem"
+          q net.minecraft.world.item.Rarity "."
           mkdir -p v && cd v
-          unzip -q -o $MCJ 'assets/minecraft/equipment/diamond.json' 'assets/minecraft/equipment/netherite.json' 'assets/minecraft/items/diamond_helmet.json' 'assets/minecraft/models/item/diamond_helmet.json' 'assets/minecraft/items/oak_stairs.json' 'assets/minecraft/blockstates/stone_brick_stairs.json' 'assets/minecraft/blockstates/stone_brick_slab.json' 'assets/minecraft/blockstates/stone_brick_wall.json' 'assets/minecraft/models/block/stone_brick_stairs.json' 'assets/minecraft/models/block/inner_stairs.json' 'assets/minecraft/models/block/outer_stairs.json' 'assets/minecraft/models/block/stairs.json' 'assets/minecraft/models/block/slab.json' 'assets/minecraft/models/block/slab_top.json' 'assets/minecraft/models/block/stone_brick_slab.json' 'assets/minecraft/models/block/stone_brick_wall_post.json' 'assets/minecraft/models/block/stone_brick_wall_side.json' 'assets/minecraft/models/block/stone_brick_wall_side_tall.json' 'assets/minecraft/models/block/stone_brick_wall_inventory.json' 'assets/minecraft/models/block/template_wall_post.json' 'assets/minecraft/models/block/template_wall_side.json' 'assets/minecraft/models/block/template_wall_side_tall.json' 'assets/minecraft/models/block/wall_inventory.json' 'assets/minecraft/models/block/glass.json' 'assets/minecraft/blockstates/glass.json' 'assets/minecraft/items/stone_brick_wall.json' 'assets/minecraft/items/stone_brick_slab.json' 'assets/minecraft/items/stone_brick_stairs.json' 'data/minecraft/loot_table/blocks/stone_brick_slab.json' 'data/minecraft/loot_table/blocks/glass.json' 'data/minecraft/recipe/stone_brick_stairs.json' 'data/minecraft/recipe/stone_brick_slab.json' 'data/minecraft/recipe/stone_brick_wall.json' 'data/minecraft/recipe/stone_brick_stairs_from_stone_bricks_stonecutting.json' 'data/minecraft/recipe/diamond_pickaxe.json' 'data/minecraft/recipe/diamond_helmet.json' 'data/minecraft/tags/block/stairs.json' 'data/minecraft/tags/item/stairs.json' 'data/minecraft/tags/block/walls.json' 'data/minecraft/tags/item/trimmable_armor.json' 'data/minecraft/tags/item/head_armor.json' 'data/minecraft/worldgen/feature/amethyst_geode.json' 'data/minecraft/worldgen/placed_feature/amethyst_geode.json' 'data/minecraft/tags/item/diamond_tool_materials.json' 'data/minecraft/advancement/story/root.json' 'data/minecraft/advancement/story/mine_stone.json' 'data/minecraft/advancement/adventure/lightning_rod_with_villager_no_fire.json' 'data/minecraft/advancement/story/obtain_armor.json' 'data/minecraft/tags/item/enchantable/sword.json' 'data/minecraft/enchantment/fire_aspect.json' 'data/minecraft/enchantment/thorns.json' 'data/minecraft/tags/enchantment/in_enchanting_table.json' 'data/minecraft/tags/item/swords.json' 'data/minecraft/tags/item/pickaxes.json' 'data/minecraft/tags/block/mineable/pickaxe.json' 'data/minecraft/tags/item/mineable/pickaxe.json' 'data/minecraft/tags/item/enchantable/mining.json' 2>unz.err; cd ..
-          : > j.txt
-          for f in $(find v -type f -name "*.json" | sort); do echo "### $f" >> j.txt; tr -d ' \n' < $f | cut -c1-2600 >> j.txt; echo >> j.txt; done
-          echo "--- unzip errors ---" >> j.txt; cat v/unz.err 2>/dev/null | head -20 >> j.txt
-          unzip -l $MCJ | awk '{print $4}' | grep -E "^assets/minecraft/(equipment|textures/entity/equipment/humanoid)" | head -40 >> j.txt
-          unzip -l $MCJ | awk '{print $4}' | grep -E "^data/minecraft/(advancement/story|enchantment)/" | head -60 >> j.txt
-          emit J1 j.txt
+          unzip -q -o $MCJ \
+            'data/minecraft/worldgen/feature/amethyst_geode.json' 'data/minecraft/worldgen/placed_feature/amethyst_geode.json' \
+            'data/minecraft/advancement/story/*' 'data/minecraft/advancement/adventure/root.json' \
+            'data/minecraft/recipe/stone_brick_stairs*' 'data/minecraft/recipe/stone_brick_slab*' 'data/minecraft/recipe/stone_brick_wall*' 'data/minecraft/recipe/diamond_pickaxe.json' 'data/minecraft/recipe/diamond_helmet.json' 'data/minecraft/recipe/golden_apple.json' \
+            'data/minecraft/loot_table/blocks/stone_brick_slab.json' 'data/minecraft/loot_table/blocks/glass.json' 'data/minecraft/loot_table/blocks/stone_brick_stairs.json' \
+            'data/minecraft/tags/block/stairs.json' 'data/minecraft/tags/block/slabs.json' 'data/minecraft/tags/block/walls.json' 'data/minecraft/tags/item/stairs.json' 'data/minecraft/tags/item/slabs.json' 'data/minecraft/tags/item/walls.json' \
+            'data/minecraft/tags/item/trimmable_armor.json' 'data/minecraft/tags/item/head_armor.json' 'data/minecraft/tags/item/chest_armor.json' 'data/minecraft/tags/item/foot_armor.json' 'data/minecraft/tags/item/leg_armor.json' \
+            'data/minecraft/tags/item/pickaxes.json' 'data/minecraft/tags/item/swords.json' 'data/minecraft/tags/item/axes.json' 'data/minecraft/tags/item/shovels.json' 'data/minecraft/tags/item/hoes.json' \
+            'data/minecraft/tags/block/mineable/*' 'data/minecraft/tags/item/enchantable/*' \
+            'assets/minecraft/blockstates/stone_brick_stairs.json' 'assets/minecraft/models/block/stone_brick_stairs_inner.json' 'assets/minecraft/models/block/stone_brick_stairs_outer.json' \
+            'assets/minecraft/items/diamond_pickaxe.json' 'assets/minecraft/models/item/diamond_pickaxe.json' 'assets/minecraft/items/golden_apple.json' \
+            'assets/minecraft/equipment/*' 'assets/minecraft/blockstates/lantern.json' 'assets/minecraft/blockstates/glowstone.json' \
+            'data/minecraft/worldgen/feature/ore_diamond_small.json' \
+            2>unz.err
+          cd ..
+          cp -r v out/vanilla
+          cat v/unz.err > out/unz.err 2>/dev/null
+          unzip -l $MCJ | awk '{print $4}' | grep -E "^(assets/minecraft/(equipment|textures/entity/equipment)|data/minecraft/advancement/story)" > out/listing.txt
           python3 - <<'PY'
           import zipfile,struct
           z=zipfile.ZipFile('/home/runner/.gradle/caches/fabric-loom/26.3/minecraft-merged.jar')
           out=[]
-          for n in ['assets/minecraft/textures/entity/equipment/humanoid/diamond.png','assets/minecraft/textures/entity/equipment/humanoid_leggings/diamond.png','assets/minecraft/textures/item/diamond_helmet.png']:
+          for n in ['assets/minecraft/textures/entity/equipment/humanoid/diamond.png','assets/minecraft/textures/entity/equipment/humanoid_leggings/diamond.png','assets/minecraft/textures/item/diamond_helmet.png','assets/minecraft/textures/block/glass.png']:
               try:
                   b=z.read(n); w,h=struct.unpack('>II',b[16:24]); out.append(f'{n} {w}x{h}')
               except Exception as e: out.append(f'{n} MISSING {e}')
-          open('png.txt','w').write('\n'.join(out))
+          open('out/png.txt','w').write('\n'.join(out))
           PY
-          emit PNG png.txt
+      - name: Publish dump to scratch branch
+        run: |
+          git config user.name "inspect-bot"
+          git config user.email "inspect-bot@users.noreply.github.com"
+          git checkout --orphan inspect-out
+          git rm -rf --cached . > /dev/null 2>&1
+          find . -mindepth 1 -maxdepth 1 ! -name out ! -name .git -exec rm -rf {} +
+          git add out
+          git commit -q -m "inspection dump"
+          git push -f origin inspect-out
