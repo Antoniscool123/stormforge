@@ -20,18 +20,19 @@ jobs:
         run: gradle build --no-daemon --console=plain > /dev/null 2>&1 || true
       - name: Dump API
         run: |
+          set +e
           emit() { # title, file
             msg=$(python3 -c "import sys;print(open(sys.argv[1]).read()[:9000].replace('%','%25').replace('\r','%0D').replace('\n','%0A'))" "$2")
             echo "::notice title=$1::$msg"
           }
-          MC=$(find ~/.gradle -name "*.jar" -path "*loom*" | grep -i -E "minecraft" | grep -v -i -E "sources|loader|fabric-api" | head -50)
+          MC=$(ls ~/.gradle/caches/fabric-loom/26.3/minecraft-merged.jar)
           echo "$MC" > jars.txt
           emit "jars" jars.txt
           CP=$(echo "$MC" | tr '\n' ':')
-          FAPI=$(find ~/.gradle -name "fabric-item-group-api*.jar" ! -name "*sources*" | head -3)
-          echo "$FAPI" > fapi.txt
-          unzip -l $(echo "$FAPI" | head -1) 2>/dev/null | grep -i ItemGroupEvents >> fapi.txt || true
-          find ~/.gradle -name "fabric-*item*.jar" ! -name "*sources*" | head -10 >> fapi.txt
+          : > fapi.txt
+          for j in $(find ~/.gradle/caches/modules-2 -path "*net.fabricmc.fabric-api*" -name "*.jar" ! -name "*sources*"); do
+            unzip -l "$j" 2>/dev/null | grep -i -E "ItemGroupEvents|CreativeModeTabEvents|ItemGroupEvents" | sed "s|^|$(basename $j): |" >> fapi.txt
+          done
           emit "fabric-itemgroup" fapi.txt
           q() { javap -cp "$CP" -public "$1" 2>/dev/null | grep -i -E "$2"; }
           {
