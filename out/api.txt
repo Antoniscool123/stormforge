@@ -1,0 +1,78 @@
+## net.minecraft.world.level.block.StairBlock / StairBlock|class
+Compiled from "StairBlock.java"
+public class net.minecraft.world.level.block.StairBlock extends net.minecraft.world.level.block.Block implements net.minecraft.world.level.block.SimpleWaterloggedBlock {
+  protected net.minecraft.world.level.block.StairBlock(net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.block.state.BlockBehaviour$Properties);
+## net.minecraft.world.level.block.TransparentBlock / TransparentBlock|class
+Compiled from "TransparentBlock.java"
+public class net.minecraft.world.level.block.TransparentBlock extends net.minecraft.world.level.block.HalfTransparentBlock {
+  protected net.minecraft.world.level.block.TransparentBlock(net.minecraft.world.level.block.state.BlockBehaviour$Properties);
+## net.minecraft.world.level.block.HalfTransparentBlock / HalfTransparentBlock|class
+Compiled from "HalfTransparentBlock.java"
+public class net.minecraft.world.level.block.HalfTransparentBlock extends net.minecraft.world.level.block.Block {
+  protected net.minecraft.world.level.block.HalfTransparentBlock(net.minecraft.world.level.block.state.BlockBehaviour$Properties);
+## net.minecraft.world.level.block.TintedGlassBlock / TintedGlassBlock|class
+Compiled from "TintedGlassBlock.java"
+public class net.minecraft.world.level.block.TintedGlassBlock extends net.minecraft.world.level.block.TransparentBlock {
+  public net.minecraft.world.level.block.TintedGlassBlock(net.minecraft.world.level.block.state.BlockBehaviour$Properties);
+## net.minecraft.world.level.block.SlabBlock / SlabBlock\(
+  public net.minecraft.world.level.block.SlabBlock(net.minecraft.world.level.block.state.BlockBehaviour$Properties);
+## net.minecraft.world.level.block.WallBlock / WallBlock\(
+  public net.minecraft.world.level.block.WallBlock(net.minecraft.world.level.block.state.BlockBehaviour$Properties);
+## net.minecraft.world.effect.MobEffect / MobEffect\(|class
+public class net.minecraft.world.effect.MobEffect implements net.minecraft.world.flag.FeatureElement {
+  protected net.minecraft.world.effect.MobEffect(net.minecraft.world.effect.MobEffectCategory, int);
+  protected net.minecraft.world.effect.MobEffect(net.minecraft.world.effect.MobEffectCategory, int, net.minecraft.core.particles.ParticleOptions);
+## net.minecraft.core.Registry / registerForHolder|static.*register\(
+  public static <T> T register(net.minecraft.core.Registry<? super T>, java.lang.String, T);
+  public static <V, T extends V> T register(net.minecraft.core.Registry<V>, net.minecraft.resources.Identifier, T);
+  public static <V, T extends V> T register(net.minecraft.core.Registry<V>, net.minecraft.resources.ResourceKey<V>, T);
+  public static <R, T extends R> net.minecraft.core.Holder$Reference<T> registerForHolder(net.minecraft.core.Registry<R>, net.minecraft.resources.ResourceKey<R>, T);
+  public static <R, T extends R> net.minecraft.core.Holder$Reference<T> registerForHolder(net.minecraft.core.Registry<R>, net.minecraft.resources.Identifier, T);
+## net.minecraft.world.item.ItemUseAnimation / EAT|DRINK|class
+public final class net.minecraft.world.item.ItemUseAnimation extends java.lang.Enum<net.minecraft.world.item.ItemUseAnimation> implements net.minecraft.util.StringRepresentable {
+  public static final net.minecraft.world.item.ItemUseAnimation EAT;
+  public static final net.minecraft.world.item.ItemUseAnimation DRINK;
+## net.minecraft.sounds.SoundEvents / GENERIC_EAT|GENERIC_DRINK|HONEY_DRINK
+  public static final net.minecraft.core.Holder$Reference<net.minecraft.sounds.SoundEvent> GENERIC_DRINK;
+  public static final net.minecraft.core.Holder$Reference<net.minecraft.sounds.SoundEvent> GENERIC_EAT;
+  public static final net.minecraft.core.Holder$Reference<net.minecraft.sounds.SoundEvent> HONEY_DRINK;
+## net.minecraft.world.item.consume_effects.ConsumeEffect / class|interface
+public interface net.minecraft.world.item.consume_effects.ConsumeEffect {
+## net.minecraft.server.MinecraftServer / getTickCount|getPlayerList
+  public net.minecraft.server.players.PlayerList getPlayerList();
+  public int getTickCount();
+## net.minecraft.server.players.PlayerList / getPlayers
+  public java.util.List<net.minecraft.server.level.ServerPlayer> getPlayersWithAddress(java.lang.String);
+  public java.util.List<net.minecraft.server.level.ServerPlayer> getPlayers();
+  public java.util.Map<java.util.UUID, net.minecraft.server.level.ServerPlayer> getPlayersByUUID();
+## net.minecraft.world.level.levelgen.GenerationStep$Decoration / UNDERGROUND
+  public static final net.minecraft.world.level.levelgen.GenerationStep$Decoration UNDERGROUND_STRUCTURES;
+  public static final net.minecraft.world.level.levelgen.GenerationStep$Decoration UNDERGROUND_ORES;
+  public static final net.minecraft.world.level.levelgen.GenerationStep$Decoration UNDERGROUND_DECORATION;
+## net.minecraft.world.level.block.state.BlockBehaviour$StatePredicate / .
+Compiled from "BlockBehaviour.java"
+public interface net.minecraft.world.level.block.state.BlockBehaviour$StatePredicate {
+  public abstract boolean test(net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.BlockGetter, net.minecraft.core.BlockPos);
+}
+## net.minecraft.world.level.block.state.BlockBehaviour$StateArgumentPredicate / .
+Compiled from "BlockBehaviour.java"
+public interface net.minecraft.world.level.block.state.BlockBehaviour$StateArgumentPredicate<A> {
+  public abstract boolean test(net.minecraft.world.level.block.state.BlockState, net.minecraft.world.level.BlockGetter, net.minecraft.core.BlockPos, A);
+}
+## net.minecraft.world.item.ItemStack / is\(net.minecraft.world.item.Item\)
+## net.minecraft.world.level.block.SoundType / GLASS|LANTERN|METAL
+  public static final net.minecraft.world.level.block.SoundType METAL;
+  public static final net.minecraft.world.level.block.SoundType GLASS;
+  public static final net.minecraft.world.level.block.SoundType LANTERN;
+## net.minecraft.world.item.CreativeModeTab$DisplayItemsGenerator / .
+Compiled from "CreativeModeTab.java"
+public interface net.minecraft.world.item.CreativeModeTab$DisplayItemsGenerator {
+  public abstract void accept(net.minecraft.world.item.CreativeModeTab$ItemDisplayParameters, net.minecraft.world.item.CreativeModeTab$Output);
+}
+## net.minecraft.world.item.CreativeModeTab$Row / TOP|BOTTOM
+  public static final net.minecraft.world.item.CreativeModeTab$Row TOP;
+  public static final net.minecraft.world.item.CreativeModeTab$Row BOTTOM;
+## net.minecraft.world.entity.LivingEntity / getBoundingBox|isAlive
+  public boolean isAlive();
+## net.minecraft.world.entity.Entity / getBoundingBox
+  public final net.minecraft.world.phys.AABB getBoundingBox();
