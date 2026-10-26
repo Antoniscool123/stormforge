@@ -22,8 +22,15 @@ jobs:
         run: |
           set +e
           emit() {
-            msg=$(python3 -c "import sys;print(open(sys.argv[1]).read()[:40000].replace('%','%25').replace('\r','%0D').replace('\n','%0A'))" "$2")
-            echo "::notice title=$1::$msg"
+            python3 - "$1" "$2" <<'PY'
+          import sys
+          t,f=sys.argv[1],sys.argv[2]
+          data=open(f).read()
+          chunks=[data[i:i+3700] for i in range(0,len(data),3700)] or ['']
+          for i,c in enumerate(chunks):
+              m=c.replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+              print(f"::notice title={t}_{i:02d}::{m}")
+          PY
           }
           MCJ=~/.gradle/caches/fabric-loom/26.3/minecraft-merged.jar
           FJARS=$(find ~/.gradle/caches/modules-2 -path "*net.fabricmc.fabric-api*" -name "*.jar" ! -name "*sources*" | tr '\n' ':')
