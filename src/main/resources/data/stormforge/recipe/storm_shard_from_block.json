@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "stormforge:storm_block"
+  ],
+  "result": {
+    "id": "stormforge:storm_shard",
+    "count": 9
+  }
+}

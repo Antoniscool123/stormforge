@@ -31,7 +31,7 @@ jobs:
           {
             grep -n -E "error:|What went wrong|Could not|FAILED|not found|cannot find symbol" -A4 build.log | head -n 200
           } > summary.txt || true
-          msg=$(python3 -c "import sys,urllib.parse;print(open('summary.txt').read()[:30000].replace('%','%25').replace('\r','%0D').replace('\n','%0A'))")
+          msg=$(python3 -c "print(open('summary.txt').read()[:30000].replace('%','%25').replace('\r','%0D').replace('\n','%0A'))")
           echo "::error title=Gradle build failed::$msg"
 
       - name: Upload jar
@@ -39,3 +39,27 @@ jobs:
         with:
           name: stormforge-jar
           path: build/libs/*.jar
+
+      # Boots a real dedicated server with the mod. fabric.autoTest makes it exit once it has
+      # finished loading, so registry, recipe, loot and worldgen JSON errors show up in the log.
+      - name: Server smoke test
+        id: smoke
+        continue-on-error: true
+        run: |
+          mkdir -p run && echo "eula=true" > run/eula.txt
+          JAVA_TOOL_OPTIONS="-Dfabric.autoTest=true" timeout 540 gradle runServer --no-daemon --console=plain > smoke.log 2>&1
+          code=$?
+          echo "exit code: $code" >> smoke.log
+          exit $code
+
+      - name: Report smoke test
+        if: always()
+        run: |
+          [ -f smoke.log ] || exit 0
+          {
+            tail -n 5 smoke.log
+            echo "----- relevant lines -----"
+            grep -n -i -E "stormforge|ERROR|Exception|Couldn't|Failed|Done \(|autotest|Caused by" smoke.log | head -n 150
+          } > smoke-summary.txt
+          msg=$(python3 -c "print(open('smoke-summary.txt').read()[:30000].replace('%','%25').replace('\r','%0D').replace('\n','%0A'))")
+          echo "::notice title=Smoke test (${{ steps.smoke.outcome }})::$msg"

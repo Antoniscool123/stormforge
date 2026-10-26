@@ -2,5 +2,8 @@
   "item.stormforge.storm_shard": "Storm Shard",
   "item.stormforge.stormcaller_staff": "Stormcaller Staff",
   "item.stormforge.rift_anchor": "Rift Anchor",
-  "item.stormforge.gale_feather": "Gale Feather"
+  "item.stormforge.gale_feather": "Gale Feather",
+  "item.stormforge.storm_blade": "Storm Blade",
+  "block.stormforge.storm_ore": "Storm Ore",
+  "block.stormforge.storm_block": "Block of Storm Shards"
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SSS",
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": "stormforge:storm_shard"
+  },
+  "result": {
+    "id": "stormforge:storm_block",
+    "count": 1
+  }
+}

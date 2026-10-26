@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "stormforge:block/storm_block"
+    }
+  }
+}
