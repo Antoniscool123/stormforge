@@ -40,17 +40,27 @@ jobs:
           name: stormforge-jar
           path: build/libs/*.jar
 
-      # Boots a real dedicated server with the mod. fabric.autoTest makes it exit once it has
-      # finished loading, so registry, recipe, loot and worldgen JSON errors show up in the log.
+      # Boots a real dedicated server with the mod and fails on any registry, recipe, loot or
+      # worldgen data error. The server is stopped as soon as it reports "Done".
       - name: Server smoke test
         id: smoke
-        continue-on-error: true
         run: |
           mkdir -p run && echo "eula=true" > run/eula.txt
-          JAVA_TOOL_OPTIONS="-Dfabric.autoTest=true" timeout 540 gradle runServer --no-daemon --console=plain > smoke.log 2>&1
-          code=$?
-          echo "exit code: $code" >> smoke.log
-          exit $code
+          gradle runServer --no-daemon --console=plain > smoke.log 2>&1 &
+          pid=$!
+          for i in $(seq 1 120); do
+            grep -q -E 'Done \(|Failed to load datapacks|Registry loading errors|Crash report' smoke.log && break
+            kill -0 $pid 2>/dev/null || break
+            sleep 5
+          done
+          sleep 3
+          pkill -f net.fabricmc.loader.impl.launch.knot || true
+          kill $pid 2>/dev/null || true
+          wait $pid 2>/dev/null || true
+          grep -q 'Done (' smoke.log || { echo "server never finished loading" >> smoke.log; exit 1; }
+          if grep -q -E 'Registry loading errors|Failed to load datapacks|Parsing error|Couldn.t parse|Crash report' smoke.log; then
+            echo "data errors found" >> smoke.log; exit 1
+          fi
 
       - name: Report smoke test
         if: always()
