@@ -28,51 +28,29 @@ jobs:
           MCJ=~/.gradle/caches/fabric-loom/26.3/minecraft-merged.jar
           FJARS=$(find ~/.gradle/caches/modules-2 -path "*net.fabricmc.fabric-api*" -name "*.jar" ! -name "*sources*" | tr '\n' ':')
           CP="$MCJ:$FJARS"
-          q() { echo "## $1 / $2" >> out/api.txt; javap -cp "$CP" -public "$1" 2>&1 | grep -E "$2" | cut -c1-400 >> out/api.txt; }
-          unzip -l $MCJ | awk '{print $4}' | grep -i -E "net/minecraft/world/level/block/[A-Za-z]*(Stair|Glass|Transparent|Slab|Wall|Lantern|Pillar)[A-Za-z]*\.class" > out/blockclasses.txt
-          q net.minecraft.world.item.equipment.ArmorMaterial "ArmorMaterial\("
-          q net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents\$EndLevelTick "."
-          q net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents\$EndTick "."
-          q net.minecraft.world.entity.player.Player "getInventory|getItemBySlot"
-          q net.minecraft.server.level.ServerPlayer "serverLevel|level\(\)"
-          q net.minecraft.world.level.Level "isRaining|isThundering|canSeeSky|isRainingAt"
-          q net.minecraft.world.entity.EquipmentSlot "HEAD|CHEST|LEGS|FEET|isArmor"
-          q net.minecraft.tags.ItemTags "TRIMMABLE_ARMOR|HEAD_ARMOR|CHEST_ARMOR|LEG_ARMOR|FOOT_ARMOR|STAIRS|SLABS|WALLS|PICKAXES|SWORDS"
-          q net.minecraft.tags.BlockTags "STAIRS|SLABS|WALLS|MINEABLE_WITH_PICKAXE|NEEDS_IRON_TOOL|NEEDS_DIAMOND_TOOL|INCORRECT_FOR_NETHERITE_TOOL"
-          q net.minecraft.world.damagesource.DamageTypes "LIGHTNING_BOLT|IN_FIRE"
-          q net.minecraft.world.damagesource.DamageSource "is\(|typeHolder"
-          q net.minecraft.tags.DamageTypeTags "IS_LIGHTNING|IS_FIRE"
-          q net.minecraft.world.item.Item "appendHoverText|inventoryTick|onUseTick|finishUsingItem"
-          q net.minecraft.world.item.Rarity "."
-          mkdir -p v && cd v
-          unzip -q -o $MCJ \
-            'data/minecraft/worldgen/feature/amethyst_geode.json' 'data/minecraft/worldgen/placed_feature/amethyst_geode.json' \
-            'data/minecraft/advancement/story/*' 'data/minecraft/advancement/adventure/root.json' \
-            'data/minecraft/recipe/stone_brick_stairs*' 'data/minecraft/recipe/stone_brick_slab*' 'data/minecraft/recipe/stone_brick_wall*' 'data/minecraft/recipe/diamond_pickaxe.json' 'data/minecraft/recipe/diamond_helmet.json' 'data/minecraft/recipe/golden_apple.json' \
-            'data/minecraft/loot_table/blocks/stone_brick_slab.json' 'data/minecraft/loot_table/blocks/glass.json' 'data/minecraft/loot_table/blocks/stone_brick_stairs.json' \
-            'data/minecraft/tags/block/stairs.json' 'data/minecraft/tags/block/slabs.json' 'data/minecraft/tags/block/walls.json' 'data/minecraft/tags/item/stairs.json' 'data/minecraft/tags/item/slabs.json' 'data/minecraft/tags/item/walls.json' \
-            'data/minecraft/tags/item/trimmable_armor.json' 'data/minecraft/tags/item/head_armor.json' 'data/minecraft/tags/item/chest_armor.json' 'data/minecraft/tags/item/foot_armor.json' 'data/minecraft/tags/item/leg_armor.json' \
-            'data/minecraft/tags/item/pickaxes.json' 'data/minecraft/tags/item/swords.json' 'data/minecraft/tags/item/axes.json' 'data/minecraft/tags/item/shovels.json' 'data/minecraft/tags/item/hoes.json' \
-            'data/minecraft/tags/block/mineable/*' 'data/minecraft/tags/item/enchantable/*' \
-            'assets/minecraft/blockstates/stone_brick_stairs.json' 'assets/minecraft/models/block/stone_brick_stairs_inner.json' 'assets/minecraft/models/block/stone_brick_stairs_outer.json' \
-            'assets/minecraft/items/diamond_pickaxe.json' 'assets/minecraft/models/item/diamond_pickaxe.json' 'assets/minecraft/items/golden_apple.json' \
-            'assets/minecraft/equipment/*' 'assets/minecraft/blockstates/lantern.json' 'assets/minecraft/blockstates/glowstone.json' \
-            'data/minecraft/worldgen/feature/ore_diamond_small.json' \
-            2>unz.err
-          cd ..
-          cp -r v out/vanilla
-          cat v/unz.err > out/unz.err 2>/dev/null
-          unzip -l $MCJ | awk '{print $4}' | grep -E "^(assets/minecraft/(equipment|textures/entity/equipment)|data/minecraft/advancement/story)" > out/listing.txt
-          python3 - <<'PY'
-          import zipfile,struct
-          z=zipfile.ZipFile('/home/runner/.gradle/caches/fabric-loom/26.3/minecraft-merged.jar')
-          out=[]
-          for n in ['assets/minecraft/textures/entity/equipment/humanoid/diamond.png','assets/minecraft/textures/entity/equipment/humanoid_leggings/diamond.png','assets/minecraft/textures/item/diamond_helmet.png','assets/minecraft/textures/block/glass.png']:
-              try:
-                  b=z.read(n); w,h=struct.unpack('>II',b[16:24]); out.append(f'{n} {w}x{h}')
-              except Exception as e: out.append(f'{n} MISSING {e}')
-          open('out/png.txt','w').write('\n'.join(out))
-          PY
+          q() { echo "## $1 / $2" >> out/api.txt; javap -cp "$CP" -protected "$1" 2>&1 | grep -E "$2" | cut -c1-400 >> out/api.txt; }
+          q net.minecraft.world.level.block.StairBlock "StairBlock|class"
+          q net.minecraft.world.level.block.TransparentBlock "TransparentBlock|class"
+          q net.minecraft.world.level.block.HalfTransparentBlock "HalfTransparentBlock|class"
+          q net.minecraft.world.level.block.TintedGlassBlock "TintedGlassBlock|class"
+          q net.minecraft.world.level.block.SlabBlock "SlabBlock\("
+          q net.minecraft.world.level.block.WallBlock "WallBlock\("
+          q net.minecraft.world.effect.MobEffect "MobEffect\(|class"
+          q net.minecraft.core.Registry "registerForHolder|static.*register\("
+          q net.minecraft.world.item.ItemUseAnimation "EAT|DRINK|class"
+          q net.minecraft.sounds.SoundEvents "GENERIC_EAT|GENERIC_DRINK|HONEY_DRINK"
+          q net.minecraft.world.item.consume_effects.ConsumeEffect "class|interface"
+          q net.minecraft.server.MinecraftServer "getTickCount|getPlayerList"
+          q net.minecraft.server.players.PlayerList "getPlayers"
+          q net.minecraft.world.level.levelgen.GenerationStep\$Decoration "UNDERGROUND"
+          q net.minecraft.world.level.block.state.BlockBehaviour\$StatePredicate "."
+          q net.minecraft.world.level.block.state.BlockBehaviour\$StateArgumentPredicate "."
+          q net.minecraft.world.item.ItemStack "is\(net.minecraft.world.item.Item\)"
+          q net.minecraft.world.level.block.SoundType "GLASS|LANTERN|METAL"
+          q net.minecraft.world.item.CreativeModeTab\$DisplayItemsGenerator "."
+          q net.minecraft.world.item.CreativeModeTab\$Row "TOP|BOTTOM"
+          q net.minecraft.world.entity.LivingEntity "getBoundingBox|isAlive"
+          q net.minecraft.world.entity.Entity "getBoundingBox"
       - name: Publish dump to scratch branch
         run: |
           git config user.name "inspect-bot"
