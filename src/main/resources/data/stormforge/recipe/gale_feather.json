@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "minecraft:feather",
+    "stormforge:storm_shard",
+    "minecraft:breeze_rod"
+  ],
+  "result": {
+    "id": "stormforge:gale_feather",
+    "count": 1
+  }
+}

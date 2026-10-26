@@ -1,0 +1,28 @@
+# Stormforge
+
+A Fabric mod: four relics forged from the heart of a storm.
+
+| Item | Craft | What it does |
+|---|---|---|
+| **Storm Shard** | amethyst shard + lightning rod + gunpowder (makes 2) | Crafting material |
+| **Stormcaller Staff** | 3 shards + lightning rod + 2 blaze rods | Right-click: 5-bolt lightning barrage + shockwave at your crosshair (range 64). Sneak + right-click: one precise bolt, short cooldown. |
+| **Rift Anchor** | 4 shards + 4 ender pearls + crying obsidian | Sneak + right-click: plant anchor at your feet. Right-click: snap back to it (same dimension). |
+| **Gale Feather** | feather + shard + breeze rod | Right-click: launch where you look, no fall damage. |
+
+## Build
+
+Requires JDK 25 and Gradle 9.6+ (or generate a wrapper with `gradle wrapper`).
+
+```
+gradle build
+```
+
+The jar is in `build/libs/stormforge-1.0.0.jar`. Drop it in your `mods` folder with Fabric Loader and Fabric API.
+
+## Version notes
+
+Targets Minecraft 26.3 with Fabric Loader 0.19.5, Fabric API 0.162.0+26.3 and Loom 1.17.
+Since 26.1 the game is unobfuscated, so the code uses Mojang names (`Item.Properties`,
+`InteractionResult`, `ServerLevel`, ...) and there is no mappings line or `modImplementation`.
+This was written without compiling against 26.3, so if the compiler flags a renamed method,
+that is the first place to look.
