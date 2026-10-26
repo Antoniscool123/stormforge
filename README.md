@@ -1,5 +1,7 @@
 # Stormforge
 
+![build](https://github.com/Antoniscool123/stormforge/actions/workflows/build.yml/badge.svg)
+
 A Fabric mod: four relics forged from the heart of a storm.
 
 | Item | Craft | What it does |
@@ -24,5 +26,5 @@ The jar is in `build/libs/stormforge-1.0.0.jar`. Drop it in your `mods` folder w
 Targets Minecraft 26.3 with Fabric Loader 0.19.5, Fabric API 0.162.0+26.3 and Loom 1.17.
 Since 26.1 the game is unobfuscated, so the code uses Mojang names (`Item.Properties`,
 `InteractionResult`, `ServerLevel`, ...) and there is no mappings line or `modImplementation`.
-This was written without compiling against 26.3, so if the compiler flags a renamed method,
-that is the first place to look.
+CI builds the mod on every push (see the Actions tab); download the jar from the latest run's
+`stormforge-jar` artifact.
