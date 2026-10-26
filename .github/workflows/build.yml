@@ -29,9 +29,9 @@ jobs:
         if: failure()
         run: |
           {
-            grep -n -E "error:|What went wrong|Could not|FAILED|not found|cannot find symbol" -A4 build.log | head -n 60
+            grep -n -E "error:|What went wrong|Could not|FAILED|not found|cannot find symbol" -A4 build.log | head -n 200
           } > summary.txt || true
-          msg=$(python3 -c "import sys,urllib.parse;print(open('summary.txt').read()[:3500].replace('%','%25').replace('\r','%0D').replace('\n','%0A'))")
+          msg=$(python3 -c "import sys,urllib.parse;print(open('summary.txt').read()[:30000].replace('%','%25').replace('\r','%0D').replace('\n','%0A'))")
           echo "::error title=Gradle build failed::$msg"
 
       - name: Upload jar

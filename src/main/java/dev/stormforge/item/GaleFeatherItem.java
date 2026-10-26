@@ -24,7 +24,7 @@ public class GaleFeatherItem extends Item {
 	public InteractionResult use(Level level, Player user, InteractionHand hand) {
 		Vec3 look = user.getLookAngle();
 		user.setDeltaMovement(look.scale(1.9).add(0, 0.25, 0));
-		user.hurtMarked = true;
+		user.syncVelocity = true;
 		user.resetFallDistance();
 
 		if (level instanceof ServerLevel serverLevel && user instanceof ServerPlayer player) {
@@ -33,7 +33,7 @@ public class GaleFeatherItem extends Item {
 				30, 0.3, 0.1, 0.3, 0.08);
 			serverLevel.playSound(null, user.getX(), user.getY(), user.getZ(),
 				SoundEvents.ENDER_DRAGON_FLAP, SoundSource.PLAYERS, 1.2f, 1.4f);
-			stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+			stack.hurtAndBreak(1, player, hand);
 			user.getCooldowns().addCooldown(stack, 40);
 		}
 		return InteractionResult.SUCCESS;

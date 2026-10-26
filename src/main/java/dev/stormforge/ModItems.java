@@ -3,7 +3,7 @@ package dev.stormforge;
 import dev.stormforge.item.GaleFeatherItem;
 import dev.stormforge.item.RiftAnchorItem;
 import dev.stormforge.item.StormStaffItem;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -35,8 +35,8 @@ public final class ModItems {
 	}
 
 	public static void register() {
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.INGREDIENTS).register(e -> e.accept(STORM_SHARD));
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(e -> {
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(e -> e.accept(STORM_SHARD));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(e -> {
 			e.accept(STORMCALLER_STAFF);
 			e.accept(RIFT_ANCHOR);
 			e.accept(GALE_FEATHER);

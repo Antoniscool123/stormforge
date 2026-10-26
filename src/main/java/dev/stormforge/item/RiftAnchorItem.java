@@ -39,17 +39,17 @@ public class RiftAnchorItem extends Item {
 				SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 1.0f, 1.5f);
 			serverLevel.sendParticles(ParticleTypes.REVERSE_PORTAL, user.getX(), user.getY() + 1, user.getZ(),
 				40, 0.4, 0.8, 0.4, 0.1);
-			player.displayClientMessage(Component.literal("Rift anchor set."), true);
+			player.sendOverlayMessage(Component.literal("Rift anchor set."));
 			return InteractionResult.SUCCESS;
 		}
 
 		GlobalPos anchor = stack.get(ModComponents.ANCHOR);
 		if (anchor == null) {
-			player.displayClientMessage(Component.literal("No anchor set. Sneak + right-click to plant one."), true);
+			player.sendOverlayMessage(Component.literal("No anchor set. Sneak + right-click to plant one."));
 			return InteractionResult.FAIL;
 		}
 		if (!anchor.dimension().equals(level.dimension())) {
-			player.displayClientMessage(Component.literal("The anchor is in another dimension."), true);
+			player.sendOverlayMessage(Component.literal("The anchor is in another dimension."));
 			return InteractionResult.FAIL;
 		}
 
@@ -67,7 +67,7 @@ public class RiftAnchorItem extends Item {
 		serverLevel.playSound(null, dest.getX() + 0.5, dest.getY(), dest.getZ() + 0.5,
 			SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 1.2f);
 
-		stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+		stack.hurtAndBreak(1, player, hand);
 		user.getCooldowns().addCooldown(stack, 100);
 		return InteractionResult.SUCCESS;
 	}

@@ -28,31 +28,20 @@ jobs:
           MCJ=~/.gradle/caches/fabric-loom/26.3/minecraft-merged.jar
           FJ=$(find ~/.gradle/caches/modules-2 -name "fabric-creative-tab-api-v1*.jar" ! -name "*sources*" | head -1)
           CP="$MCJ:$FJ"
-          unzip -l $MCJ | grep -i lightning | awk '{print $4}' > a.txt
-          javap -cp "$CP" -public net.minecraft.world.entity.LightningBolt >> a.txt
-          javap -cp "$CP" -public net.minecraft.world.entity.EntityType | grep -i -E "create|spawn" | head -10 >> a.txt
-          unzip -l $MCJ | grep -E "world/entity/EntityType" | awk '{print $4}' >> a.txt
+          mkdir x && cd x && unzip -q $MCJ 'net/minecraft/world/*' && cd ..
+          grep -rl "LIGHTNING_BOLT" x | head -10 > a.txt
+          for c in $(grep -rl "LIGHTNING_BOLT" x | head -3 | sed 's|^x/||; s|\.class$||; s|/|.|g'); do javap -cp "$CP" -public "$c" | grep -i -E "lightning" >> a.txt; done
+          javap -cp "$CP" -public net.minecraft.world.entity.EntityType | grep -E "create|spawn" | head -8 >> a.txt
           emit A a.txt
-          javap -cp "$CP" -p -c net.minecraft.server.level.ServerEntity | grep -E "needsSync|syncVelocity|SetEntityMotion" > b.txt
-          javap -cp "$CP" -p -c net.minecraft.server.level.ServerPlayer | grep -E "needsSync|syncVelocity" | head -10 >> b.txt
-          emit B b.txt
-          javap -cp "$CP" -public net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents 'net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents$ModifyOutput' > c.txt
-          javap -cp "$CP" -public net.minecraft.world.item.CreativeModeTabs | grep -E "INGREDIENTS|TOOLS" >> c.txt
-          javap -cp "$CP" -public net.minecraft.world.item.CreativeModeTab\$Output >> c.txt
-          emit C c.txt
-          { javap -cp "$CP" -public net.minecraft.world.entity.player.Player | grep -i -E "pick|getCooldowns|message"
-            javap -cp "$CP" -public net.minecraft.world.entity.Entity | grep -i -E " pick|teleportTo|setPos|isShiftKeyDown|isCrouching|getLookAngle|blockPosition|level\(\)"
-            javap -cp "$CP" -public net.minecraft.server.level.ServerPlayer | grep -i -E "teleportTo|displayClient|message"
-            javap -cp "$CP" -public net.minecraft.world.item.ItemCooldowns
-            javap -cp "$CP" -public 'net.minecraft.world.item.Item$Properties' | grep -E "stacksTo|durability|setId|fireResistant"
-            javap -cp "$CP" -public net.minecraft.world.item.Item | grep -E "use\("
-            javap -cp "$CP" -public net.minecraft.server.level.ServerLevel | grep -E "sendParticles|playSound|addFreshEntity|getEntitiesOfClass"
+          { javap -cp "$CP" -public net.minecraft.server.level.ServerLevel | grep -E "playSound|getEntitiesOfClass"
             javap -cp "$CP" -public net.minecraft.world.level.Level | grep -E "playSound|getEntitiesOfClass|dimension\(\)"
             javap -cp "$CP" -public net.minecraft.core.GlobalPos
-            javap -cp "$CP" -public net.minecraft.resources.Identifier | grep -E "fromNamespaceAndPath|static"
-            javap -cp "$CP" -public 'net.minecraft.core.component.DataComponentType$Builder'
+            javap -cp "$CP" -public net.minecraft.resources.Identifier | grep -E "fromNamespaceAndPath"
+            javap -cp "$CP" -public 'net.minecraft.core.component.DataComponentType$Builder' | grep -E "persistent|build"
             javap -cp "$CP" -public net.minecraft.world.entity.EntitySpawnReason | grep TRIGGER
             javap -cp "$CP" -public net.minecraft.sounds.SoundEvents | grep -E " LIGHTNING_BOLT_THUNDER| BEACON_ACTIVATE| ENDERMAN_TELEPORT| ENDER_DRAGON_FLAP"
             javap -cp "$CP" -public net.minecraft.core.particles.ParticleTypes | grep -E " ELECTRIC_SPARK| REVERSE_PORTAL| PORTAL| CLOUD"
+            javap -cp "$CP" -public net.minecraft.world.item.CreativeModeTabs | grep -E "INGREDIENTS|TOOLS"
+            javap -cp "$CP" -public net.minecraft.world.entity.LightningBolt | grep -E "set"
           } > d.txt 2>&1
           emit D d.txt

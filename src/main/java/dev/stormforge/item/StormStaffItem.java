@@ -61,7 +61,7 @@ public class StormStaffItem extends Item {
 					new AABB(target, target).inflate(5), t -> t != user)) {
 				Vec3 push = e.position().subtract(target).normalize().scale(0.9).add(0, 0.5, 0);
 				e.setDeltaMovement(e.getDeltaMovement().add(push));
-				e.hurtMarked = true;
+				e.syncVelocity = true;
 			}
 
 			serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, target.x, target.y + 0.5, target.z,
@@ -69,7 +69,7 @@ public class StormStaffItem extends Item {
 			serverLevel.playSound(null, user.getX(), user.getY(), user.getZ(),
 				SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.PLAYERS, 2.0f, 1.0f);
 
-			stack.hurtAndBreak(precise ? 1 : 3, player, LivingEntity.getSlotForHand(hand));
+			stack.hurtAndBreak(precise ? 1 : 3, player, hand);
 			user.getCooldowns().addCooldown(stack, precise ? 20 : 80);
 		}
 		return InteractionResult.SUCCESS;
