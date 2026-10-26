@@ -1,0 +1,48 @@
+name: inspect
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 9.6.0
+      - name: Resolve jars
+        run: gradle build --no-daemon --console=plain > /dev/null 2>&1 || true
+      - name: Dump API
+        run: |
+          emit() { # title, file
+            msg=$(python3 -c "import sys;print(open(sys.argv[1]).read()[:9000].replace('%','%25').replace('\r','%0D').replace('\n','%0A'))" "$2")
+            echo "::notice title=$1::$msg"
+          }
+          MC=$(find ~/.gradle -name "*.jar" -path "*loom*" | grep -i -E "minecraft" | grep -v -i -E "sources|loader|fabric-api" | head -50)
+          echo "$MC" > jars.txt
+          emit "jars" jars.txt
+          CP=$(echo "$MC" | tr '\n' ':')
+          FAPI=$(find ~/.gradle -name "fabric-item-group-api*.jar" ! -name "*sources*" | head -3)
+          echo "$FAPI" > fapi.txt
+          unzip -l $(echo "$FAPI" | head -1) 2>/dev/null | grep -i ItemGroupEvents >> fapi.txt || true
+          find ~/.gradle -name "fabric-*item*.jar" ! -name "*sources*" | head -10 >> fapi.txt
+          emit "fabric-itemgroup" fapi.txt
+          q() { javap -cp "$CP" -public "$1" 2>/dev/null | grep -i -E "$2"; }
+          {
+            echo "## EntityType"; q net.minecraft.world.entity.EntityType "lightning"
+            echo "## Entity"; q net.minecraft.world.entity.Entity "hurtMarked|markHurt|velocity|needsSync|resetFallDistance|setDeltaMovement|hasImpulse|impulse"
+            echo "## LivingEntity"; q net.minecraft.world.entity.LivingEntity "slot|hand"
+            echo "## InteractionHand"; javap -cp "$CP" -public net.minecraft.world.InteractionHand
+            echo "## ItemStack hurtAndBreak"; q net.minecraft.world.item.ItemStack "hurtAndBreak"
+            echo "## ServerPlayer msg"; q net.minecraft.server.level.ServerPlayer "message|overlay|actionbar"
+            echo "## Player msg"; q net.minecraft.world.entity.player.Player "message|overlay|actionbar"
+            echo "## LightningBolt"; q net.minecraft.world.entity.LightningBolt "cause|channel"
+            echo "## ServerPlayer teleport"; q net.minecraft.server.level.ServerPlayer "teleportTo"
+          } > dump.txt
+          emit "mc-api" dump.txt
