@@ -1,9 +1,11 @@
 package dev.stormforge.item;
 
+import dev.stormforge.ModEffects;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LightningBolt;
@@ -35,6 +37,8 @@ public class StormBladeItem extends Item {
 		if (!(target.level() instanceof ServerLevel level)) {
 			return;
 		}
+
+		target.addEffect(new MobEffectInstance(ModEffects.STATIC_CHARGE, 100, 1), attacker);
 
 		Vec3 origin = target.position();
 		List<LivingEntity> victims = level.getEntitiesOfClass(LivingEntity.class,

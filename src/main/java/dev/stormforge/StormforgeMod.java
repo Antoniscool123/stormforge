@@ -11,8 +11,11 @@ public class StormforgeMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ModComponents.register();
+		ModEffects.register();
 		ModBlocks.register();
 		ModItems.register();
+		ModTabs.register();
+		TempestSetBonus.register();
 		LOGGER.info("Stormforge loaded. The sky is listening.");
 	}
 }

@@ -1,0 +1,31 @@
+{
+  "criteria": {
+    "feather": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "stormforge:gale_feather"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "stormforge:gale_feather"
+    },
+    "title": {
+      "translate": "advancements.stormforge.feather.title"
+    },
+    "description": {
+      "translate": "advancements.stormforge.feather.description"
+    }
+  },
+  "requirements": [
+    [
+      "feather"
+    ]
+  ],
+  "parent": "stormforge:root"
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "stormforge:block/storm_brick_slab"
+    },
+    "type=double": {
+      "model": "stormforge:block/storm_bricks"
+    },
+    "type=top": {
+      "model": "stormforge:block/storm_brick_slab_top"
+    }
+  }
+}

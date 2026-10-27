@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "stormforge:chiseled_storm_bricks"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "stormforge:blocks/chiseled_storm_bricks"
+}

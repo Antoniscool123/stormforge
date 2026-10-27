@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "stormforge:polished_stormstone",
+  "result": {
+    "id": "stormforge:storm_bricks"
+  }
+}

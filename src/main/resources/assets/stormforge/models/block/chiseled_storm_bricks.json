@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "stormforge:block/chiseled_storm_bricks"
+  }
+}

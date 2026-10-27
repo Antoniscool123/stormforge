@@ -1,0 +1,31 @@
+{
+  "criteria": {
+    "glass": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "stormforge:storm_glass"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "stormforge:storm_glass"
+    },
+    "title": {
+      "translate": "advancements.stormforge.glasshouse.title"
+    },
+    "description": {
+      "translate": "advancements.stormforge.glasshouse.description"
+    }
+  },
+  "requirements": [
+    [
+      "glass"
+    ]
+  ],
+  "parent": "stormforge:root"
+}

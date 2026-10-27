@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "staff": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "stormforge:stormcaller_staff"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "stormforge:stormcaller_staff"
+    },
+    "title": {
+      "translate": "advancements.stormforge.caller.title"
+    },
+    "description": {
+      "translate": "advancements.stormforge.caller.description"
+    },
+    "frame": "goal"
+  },
+  "requirements": [
+    [
+      "staff"
+    ]
+  ],
+  "parent": "stormforge:root"
+}

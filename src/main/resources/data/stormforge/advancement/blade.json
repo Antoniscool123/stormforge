@@ -1,0 +1,31 @@
+{
+  "criteria": {
+    "blade": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "stormforge:storm_blade"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "stormforge:storm_blade"
+    },
+    "title": {
+      "translate": "advancements.stormforge.blade.title"
+    },
+    "description": {
+      "translate": "advancements.stormforge.blade.description"
+    }
+  },
+  "requirements": [
+    [
+      "blade"
+    ]
+  ],
+  "parent": "stormforge:root"
+}

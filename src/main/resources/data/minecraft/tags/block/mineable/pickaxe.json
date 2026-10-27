@@ -1,6 +1,19 @@
 {
   "values": [
     "stormforge:storm_ore",
-    "stormforge:storm_block"
+    "stormforge:storm_block",
+    "stormforge:stormstone",
+    "stormforge:stormstone_stairs",
+    "stormforge:stormstone_slab",
+    "stormforge:stormstone_wall",
+    "stormforge:polished_stormstone",
+    "stormforge:storm_bricks",
+    "stormforge:storm_brick_stairs",
+    "stormforge:storm_brick_slab",
+    "stormforge:storm_brick_wall",
+    "stormforge:chiseled_storm_bricks",
+    "stormforge:storm_pillar",
+    "stormforge:storm_glass",
+    "stormforge:storm_lamp"
   ]
 }

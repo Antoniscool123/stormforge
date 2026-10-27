@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "stormforge:stormstone",
+  "result": {
+    "id": "stormforge:stormstone_slab",
+    "count": 2
+  }
+}

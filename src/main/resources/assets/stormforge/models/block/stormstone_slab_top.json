@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "stormforge:block/stormstone",
+    "side": "stormforge:block/stormstone",
+    "top": "stormforge:block/stormstone"
+  }
+}

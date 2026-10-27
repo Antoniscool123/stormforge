@@ -1,0 +1,64 @@
+{
+  "criteria": {
+    "pickaxe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "stormforge:tempest_pickaxe"
+          }
+        ]
+      }
+    },
+    "axe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "stormforge:tempest_axe"
+          }
+        ]
+      }
+    },
+    "shovel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "stormforge:tempest_shovel"
+          }
+        ]
+      }
+    },
+    "hoe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "stormforge:tempest_hoe"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "stormforge:tempest_pickaxe"
+    },
+    "title": {
+      "translate": "advancements.stormforge.tools.title"
+    },
+    "description": {
+      "translate": "advancements.stormforge.tools.description"
+    }
+  },
+  "requirements": [
+    [
+      "pickaxe",
+      "axe",
+      "shovel",
+      "hoe"
+    ]
+  ],
+  "parent": "stormforge:forged"
+}

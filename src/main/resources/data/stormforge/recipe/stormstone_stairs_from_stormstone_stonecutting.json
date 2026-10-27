@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "stormforge:stormstone",
+  "result": {
+    "id": "stormforge:stormstone_stairs"
+  }
+}

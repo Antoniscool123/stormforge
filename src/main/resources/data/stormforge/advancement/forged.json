@@ -1,0 +1,31 @@
+{
+  "criteria": {
+    "ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "stormforge:tempest_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "stormforge:tempest_ingot"
+    },
+    "title": {
+      "translate": "advancements.stormforge.forged.title"
+    },
+    "description": {
+      "translate": "advancements.stormforge.forged.description"
+    }
+  },
+  "requirements": [
+    [
+      "ingot"
+    ]
+  ],
+  "parent": "stormforge:root"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "stormforge:block/storm_bricks",
+    "side": "stormforge:block/storm_bricks",
+    "top": "stormforge:block/storm_bricks"
+  }
+}

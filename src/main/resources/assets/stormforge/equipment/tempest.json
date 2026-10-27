@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "stormforge:tempest"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "stormforge:tempest"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "stormforge:tempest"
+      }
+    ]
+  }
+}

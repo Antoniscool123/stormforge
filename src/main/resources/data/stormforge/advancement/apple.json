@@ -1,0 +1,31 @@
+{
+  "criteria": {
+    "apple": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "stormforge:thunder_apple"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "stormforge:thunder_apple"
+    },
+    "title": {
+      "translate": "advancements.stormforge.apple.title"
+    },
+    "description": {
+      "translate": "advancements.stormforge.apple.description"
+    }
+  },
+  "requirements": [
+    [
+      "apple"
+    ]
+  ],
+  "parent": "stormforge:root"
+}

@@ -1,0 +1,31 @@
+{
+  "criteria": {
+    "anchor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "stormforge:rift_anchor"
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "stormforge:rift_anchor"
+    },
+    "title": {
+      "translate": "advancements.stormforge.anchor.title"
+    },
+    "description": {
+      "translate": "advancements.stormforge.anchor.description"
+    }
+  },
+  "requirements": [
+    [
+      "anchor"
+    ]
+  ],
+  "parent": "stormforge:feather"
+}

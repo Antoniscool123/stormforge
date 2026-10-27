@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "stormforge:storm_bricks",
+  "result": {
+    "id": "stormforge:storm_brick_stairs"
+  }
+}

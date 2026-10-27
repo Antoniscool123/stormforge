@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:glass_bottle",
+    "stormforge:storm_shard",
+    "minecraft:sugar"
+  ],
+  "result": {
+    "id": "stormforge:storm_vial"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "stormforge:storm_shard",
+    "stormforge:storm_shard",
+    "minecraft:iron_ingot"
+  ],
+  "result": {
+    "id": "stormforge:tempest_ingot",
+    "count": 2
+  }
+}
