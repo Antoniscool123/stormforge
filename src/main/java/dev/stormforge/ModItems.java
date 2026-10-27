@@ -16,12 +16,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
@@ -66,11 +63,11 @@ public final class ModItems {
 
 	public static final Item TEMPEST_PICKAXE = register("tempest_pickaxe", Item::new,
 		new Item.Properties().pickaxe(TEMPEST_TOOL, 1.0f, -2.8f).fireResistant());
-	public static final Item TEMPEST_AXE = register("tempest_axe", AxeItem::new,
+	public static final Item TEMPEST_AXE = register("tempest_axe", Item::new,
 		new Item.Properties().axe(TEMPEST_TOOL, 5.0f, -3.0f).fireResistant());
-	public static final Item TEMPEST_SHOVEL = register("tempest_shovel", ShovelItem::new,
+	public static final Item TEMPEST_SHOVEL = register("tempest_shovel", Item::new,
 		new Item.Properties().shovel(TEMPEST_TOOL, 1.5f, -3.0f).fireResistant());
-	public static final Item TEMPEST_HOE = register("tempest_hoe", HoeItem::new,
+	public static final Item TEMPEST_HOE = register("tempest_hoe", Item::new,
 		new Item.Properties().hoe(TEMPEST_TOOL, -4.0f, 0.0f).fireResistant());
 
 	public static final ResourceKey<EquipmentAsset> TEMPEST_ASSET =

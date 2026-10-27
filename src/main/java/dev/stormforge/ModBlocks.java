@@ -75,7 +75,7 @@ public final class ModBlocks {
 			.isValidSpawn((state, level, pos, type) -> false)
 			.isRedstoneConductor((state, level, pos) -> false)
 			.isSuffocating((state, level, pos) -> false)
-			.isViewBlocking((state, level, pos) -> false));
+			.isViewBlocking((state, level, pos, box) -> false));
 
 	public static final Block STORM_LAMP = register("storm_lamp", Block::new,
 		BlockBehaviour.Properties.of()
